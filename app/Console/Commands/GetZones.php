@@ -18,15 +18,13 @@ class GetZones extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Gets all the zones from the National Weather Service';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        logger('We getting in here?');
-        
         return 0;
     }
 }

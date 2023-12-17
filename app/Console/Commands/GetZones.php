@@ -20,7 +20,7 @@ class GetZones extends Command
      *
      * @var string
      */
-    protected $description = 'Gets all the zones from the National Weather Service';
+    protected $description = 'Gets all the zones from the weather.gov API';
 
     /**
      * Execute the console command.

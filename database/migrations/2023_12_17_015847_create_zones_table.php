@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('zone', 6);
             $table->string('county');
-            $table->string('state', 2);
+            $table->string('state', 2)->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

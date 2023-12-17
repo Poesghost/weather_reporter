@@ -14,7 +14,7 @@ class GetAlerts extends Command
      *
      * @var string
      */
-    protected $signature = 'get:alerts';
+    protected $signature = 'get:alerts {--all}';
 
     /**
      * The console command description.
@@ -28,7 +28,90 @@ class GetAlerts extends Command
      */
     public function handle()
     {
-        $zones = Zone::select('id', 'zone')->get()->toArray();
+        $states = [
+            'Alabama' => 'AL',
+            'Alaska' => 'AK',
+            'Arizona' => 'AZ',
+            'Arkansas' => 'AR',
+            'American Samoa' => 'AS',
+            'California' => 'CA',
+            'Colorado' => 'CO',
+            'Connecticut' => 'CT',
+            'Delaware' => 'DE',
+            'District of Columbia' => 'DC',
+            'Florida' => 'FL',
+            'Georgia' => 'GA',
+            'Guam' => 'GU',
+            'Hawaii' => 'HI',
+            'Idaho' => 'ID',
+            'Illinois' => 'IL',
+            'Indiana' => 'IN',
+            'Iowa' => 'IA',
+            'Kansas' => 'KS',
+            'Kentucky' => 'KY',
+            'Louisiana' => 'LA',
+            'Maine' => 'ME',
+            'Maryland' => 'MD',
+            'Massachusetts' => 'MA',
+            'Michigan' => 'MI',
+            'Minnesota' => 'MN',
+            'Mississippi' => 'MS',
+            'Missouri' => 'MO',
+            'Montana' => 'MT',
+            'Nebraska' => 'NE',
+            'Nevada' => 'NV',
+            'New Hampshire' => 'NH',
+            'New Jersey' => 'NJ',
+            'New Mexico' => 'NM',
+            'New York' => 'NY',
+            'North Carolina' => 'NC',
+            'North Dakota' => 'ND',
+            'Northern Mariana Islands' => 'MP',
+            'Ohio' => 'OH',
+            'Oklahoma' => 'OK',
+            'Oregon' => 'OR',
+            'Pennsylvania' => 'PA',
+            'Puerto Rico' => 'PR',
+            'Rhode Island' => 'RI',
+            'South Carolina' => 'SC',
+            'South Dakota' => 'SD',
+            'Tennessee' => 'TN',
+            'Texas' => 'TX',
+            'Trust Territories' => 'TT',
+            'Utah' => 'UT',
+            'Vermont' => 'VT',
+            'Virginia' => 'VA',
+            'Virgin Islands' => 'VI',
+            'Washington' => 'WA',
+            'West Virginia' => 'WV',
+            'Wisconsin' => 'WI',
+            'Wyoming' => 'WY',
+        ];
+
+        $all = $this->option('all');
+
+        if ($all) {
+            $zones = Zone::select('id', 'zone')->get()->toArray();
+        } else {
+            // TODO: some zones do not have a state value and are NULL. Figure out what those are and if 
+            // we need alerts for those zones
+
+            foreach ($states as $key => $value) {
+                $locations[] = $key; 
+            }
+
+            $location = $this->choice(
+                'Please select a zone.',
+                $locations,
+                0
+            );
+
+            // TODO: need to ensure I'm not creating multiples of the same alert
+            $zones = Zone::select('id', 'zone')
+                ->whereIn('state', [$states[$location]])
+                ->get()
+                ->toArray();
+        }
 
         $bar = $this->output->createProgressBar(count($zones));
         $bar->start();
